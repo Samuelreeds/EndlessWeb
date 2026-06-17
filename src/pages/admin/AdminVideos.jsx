@@ -2,7 +2,7 @@ import { useState } from 'react';
 import VideoCard from '../../components/admin/VideoCard';
 import VideoUploadModal from '../../components/admin/VideoUploadModal';
 
-export default function AdminVideoTestimonials() {
+export default function AdminVideos() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const mockVideos = [

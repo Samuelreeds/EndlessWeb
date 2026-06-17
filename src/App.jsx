@@ -18,6 +18,10 @@ import AdminTestimonials from './pages/admin/AdminTestimonials';
 import AdminVideoTestimonials from './pages/admin/AdminVideoTestimonials';
 import AdminCaseStudies from './pages/admin/AdminCaseStudies';
 
+import AdminMedia from './pages/admin/AdminMedia';
+import AdminUsers from './pages/admin/AdminUsers';
+import AdminSettings from './pages/admin/AdminSettings';
+
 // Security: Protected Route Wrapper
 const ProtectedRoute = () => {
   const token = localStorage.getItem('adminToken');
@@ -63,6 +67,9 @@ export default function App() {
             <Route path="testimonials" element={<AdminTestimonials />} />
             <Route path="video-testimonials" element={<AdminVideoTestimonials />} />
             <Route path="case-studies" element={<AdminCaseStudies />} />
+            <Route path="media" element={<AdminMedia />} />
+            <Route path="users" element={<AdminUsers />} />
+            <Route path="settings" element={<AdminSettings />} />
           </Route>
         </Route>
       </Routes>
