@@ -1,6 +1,22 @@
+import { useEffect, useState } from 'react';
+
 export default function ClientLogos() {
-  const logoModules = import.meta.glob('../assets/LogoClient/*.{png,jpg,jpeg,svg,PNG,JPG}', { eager: true });
-  const logos = Object.values(logoModules).map((module) => module.default);
+  const [logos, setLogos] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/cms/clients')
+      .then((res) => res.json())
+      .then((data) => {
+        // Fallback to local if DB is empty, otherwise use DB images
+        if (data.length > 0) {
+          setLogos(data.map((client) => client.logoUrl || client.imageUrl));
+        } else {
+          const logoModules = import.meta.glob('../assets/LogoClient/*.{png,jpg,jpeg,svg,PNG,JPG}', { eager: true });
+          setLogos(Object.values(logoModules).map((module) => module.default));
+        }
+      })
+      .catch((err) => console.error('Error fetching clients:', err));
+  }, []);
 
   if (logos.length === 0) return null;
 

@@ -1,4 +1,17 @@
+import { useEffect, useState } from 'react';
+
 export default function VideoTestimonialsSection() {
+  const [videos, setVideos] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/cms/video-testimonials')
+      .then((res) => res.json())
+      .then((data) => setVideos(data.slice(0, 3)))
+      .catch((err) => console.error('Error fetching videos:', err));
+  }, []);
+
+  if (videos.length === 0) return null;
+
   return (
     <section style={{ background: 'white' }}>
       <div className="container">
@@ -8,36 +21,18 @@ export default function VideoTestimonialsSection() {
           <p>Don't take our word for it — watch what our clients have to say in their own words.</p>
         </div>
         <div className="video-grid">
-          <div>
-            <div className="video-thumb">
-              <div className="play-btn">
-                <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          {videos.map((video) => (
+            <div key={video.id}>
+              <div className="video-thumb" style={video.thumbnailUrl ? { backgroundImage: `url(${video.thumbnailUrl})`, backgroundSize: 'cover' } : {}}>
+                <div className="play-btn">
+                  <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+                </div>
+                {!video.thumbnailUrl && <span className="placeholder-video">[Video: {video.name}]</span>}
               </div>
-              <span className="placeholder-video">[PLACEHOLDER — Video testimonial 1]</span>
+              <div className="video-label">{video.name} — {video.role}</div>
+              <div className="video-sub">{video.quote || 'Watch Video'}</div>
             </div>
-            <div className="video-label">Sarah K. — Café Owner</div>
-            <div className="video-sub">Watch: 45 seconds</div>
-          </div>
-          <div>
-            <div className="video-thumb">
-              <div className="play-btn">
-                <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              </div>
-              <span className="placeholder-video">[PLACEHOLDER — Video testimonial 2]</span>
-            </div>
-            <div className="video-label">Marcus D. — Fitness Studio</div>
-            <div className="video-sub">Watch: 1 minute</div>
-          </div>
-          <div>
-            <div className="video-thumb">
-              <div className="play-btn">
-                <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              </div>
-              <span className="placeholder-video">[PLACEHOLDER — Video testimonial 3]</span>
-            </div>
-            <div className="video-label">Lina T. — Boutique Retailer</div>
-            <div className="video-sub">Watch: 55 seconds</div>
-          </div>
+          ))}
         </div>
       </div>
     </section>

@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  ADMIN
+  SUPER_ADMIN
+}
+
+model Admin {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  role      Role     @default(ADMIN)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// --- CMS MODELS ---
+
+model ClientLogo {
+  id        String   @id @default(uuid())
+  name      String
+  imageUrl  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Testimonial {
+  id        String   @id @default(uuid())
+  stars     Int      @default(5)
+  quote     String
+  avatar    String   
+  name      String
+  role      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VideoTestimonial {
+  id        String   @id @default(uuid())
+  videoUrl  String
+  label     String
+  subtext   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model CaseStudy {
+  id        String   @id @default(uuid())
+  tag       String
+  title     String
+  challenge String
+  approach  String
+  results   Json     // Stores array: [{ num: "4.4x", lbl: "Followers..." }]
+  imageUrl  String
+  isReverse Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

@@ -1,7 +1,17 @@
-import case1Img from '../../assets/LogoClient/BicyleShop.png';
-import case2Img from '../../assets/LogoClient/DaraShop.png';// <-- Change to your actual file name
+import { useEffect, useState } from 'react';
 
 export default function CaseStudiesSection() {
+  const [caseStudies, setCaseStudies] = useState([]);
+
+  useEffect(() => {
+    fetch('http://localhost:5000/api/cms/case-studies')
+      .then((res) => res.json())
+      .then((data) => setCaseStudies(data))
+      .catch((err) => console.error('Error fetching case studies:', err));
+  }, []);
+
+  if (caseStudies.length === 0) return null;
+
   return (
     <section className="case-section">
       <div className="container">
@@ -12,77 +22,55 @@ export default function CaseStudiesSection() {
         </div>
         <div style={{ marginTop: '56px' }}>
 
-          <div className="case-study">
-            <div className="case-content">
-              <div className="case-tag">Case Study 01 — F&B Business</div>
-              <h3>From Zero Engagement to 22 DMs Per Week</h3>
-              <div className="case-point">
-                <strong>Challenge</strong>
-                <p>No consistent content, zero engagement, outdated visuals that didn't reflect the quality of the business at all.</p>
-              </div>
-              <div className="case-point">
-                <strong>Approach</strong>
-                <p>Redesigned visual identity, built a 30-day content calendar, and launched two boosted posts targeting local audiences within the first month.</p>
-              </div>
-              <div className="case-results">
-                <div>
-                  <div className="result-num">4.4×</div>
-                  <div className="result-lbl">Followers in 90 days</div>
-                </div>
-                <div>
-                  <div className="result-num">14×</div>
-                  <div className="result-lbl">Average post reach</div>
-                </div>
-                <div>
-                  <div className="result-num">+20</div>
-                  <div className="result-lbl">DMs/week from Instagram</div>
-                </div>
-              </div>
-            </div>
-            <div className="case-visual" style={{ padding: 0, border: 'none', background: 'transparent' }}>
-              <img 
-                src={case1Img} 
-                alt="Case Study 1" 
-                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 'var(--radius-lg)' }} 
-              />
-            </div>
-          </div>
+          {caseStudies.map((study, index) => {
+            // Parse metrics if they are stored as JSON string, else fallback
+            let metrics = [];
+            try {
+              metrics = typeof study.results === 'string' ? JSON.parse(study.results) : study.results;
+            } catch (e) {
+              metrics = [];
+            }
 
-          <div className="case-study reverse">
-            <div className="case-content">
-              <div className="case-tag">Case Study 02 — Boutique Retail</div>
-              <h3>Engagement Up 575% in Two Months</h3>
-              <div className="case-point">
-                <strong>Challenge</strong>
-                <p>Inconsistent posting, no brand voice, and an engagement rate so low the algorithm had stopped showing posts to followers.</p>
-              </div>
-              <div className="case-point">
-                <strong>Approach</strong>
-                <p>Developed brand content pillars, built a daily posting schedule, and launched a custom poster design series with a clear visual identity.</p>
-              </div>
-              <div className="case-results">
-                <div>
-                  <div className="result-num">5.4%</div>
-                  <div className="result-lbl">Engagement rate (was 0.8%)</div>
+            return (
+              <div key={study.id} className={`case-study ${index % 2 !== 0 ? 'reverse' : ''}`}>
+                <div className="case-content">
+                  <div className="case-tag">{study.category || `Case Study 0${index + 1}`}</div>
+                  <h3>{study.title}</h3>
+                  <div className="case-point">
+                    <strong>Challenge</strong>
+                    <p>{study.challenge}</p>
+                  </div>
+                  <div className="case-point">
+                    <strong>Approach</strong>
+                    <p>{study.approach}</p>
+                  </div>
+                  
+                  {metrics && metrics.length > 0 && (
+                    <div className="case-results">
+                      {metrics.map((m, i) => (
+                        <div key={i}>
+                          <div className="result-num">{m.value}</div>
+                          <div className="result-lbl">{m.label}</div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
-                <div>
-                  <div className="result-num">3×</div>
-                  <div className="result-lbl">Story views in 60 days</div>
-                </div>
-                <div>
-                  <div className="result-num">Wk 3</div>
-                  <div className="result-lbl">First Instagram sale</div>
+                
+                <div className="case-visual" style={{ padding: 0, border: 'none', background: 'transparent' }}>
+                  {study.imageUrl ? (
+                    <img 
+                      src={study.imageUrl} 
+                      alt={study.title} 
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 'var(--radius-lg)' }} 
+                    />
+                  ) : (
+                    <div>[PLACEHOLDER IMAGE]</div>
+                  )}
                 </div>
               </div>
-            </div>
-            <div className="case-visual" style={{ padding: 0, border: 'none', background: 'transparent' }}>
-              <img 
-                src={case2Img} 
-                alt="Case Study 2" 
-                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 'var(--radius-lg)' }} 
-              />
-            </div>
-          </div>
+            );
+          })}
 
         </div>
       </div>

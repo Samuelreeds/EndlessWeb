@@ -4,4 +4,16 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-})
+  build: {
+    outDir: 'dist',
+    sourcemap: false, // Set to false for production to reduce bundle size
+    minify: 'terser', // Ensure code is minified
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom', 'react-router-dom'],
+        },
+      },
+    },
+  },
+});
