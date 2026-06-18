@@ -16,14 +16,16 @@ export default function AdminClients() {
           onClick={() => setIsModalOpen(true)}
           className="bg-[#2563EB] hover:bg-[#1E4D99] text-white px-5 py-2.5 rounded-xl font-bold transition-all shadow-sm shadow-blue-500/20 flex items-center gap-2"
         >
-          <span>＋</span> Add Client
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" /></svg> Add Client
         </button>
       </div>
 
       <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm overflow-hidden flex flex-col">
         <div className="p-5 border-b border-[#F1F5F9] flex flex-col sm:flex-row gap-4 justify-between bg-[#F8FAFC]">
           <div className="relative w-full sm:w-80">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#94A3B8]">🔍</span>
+            <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#94A3B8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
             <input 
               type="text" 
               placeholder="Search clients..." 

@@ -15,7 +15,9 @@ export default function VideoUploadModal({ isOpen, onClose }) {
             <div className="md:col-span-2">
               <label className="block text-sm font-bold text-[#334155] mb-2">Video File</label>
               <div className="border-2 border-dashed border-[#CBD5E1] rounded-2xl p-10 text-center hover:bg-[#F8FAFC] transition cursor-pointer group">
-                <span className="text-4xl mb-3 block group-hover:scale-110 transition-transform">📹</span>
+                <svg className="w-8 h-8 mx-auto text-[#94A3B8] group-hover:text-[#2563EB] mb-3 group-hover:scale-110 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
                 <span className="text-[15px] text-[#0A1628] font-bold block mb-1">Click to upload video or drag and drop</span>
                 <span className="text-[13px] text-[#64748B] font-medium">MP4, WebM, or OGG up to 50MB</span>
               </div>
@@ -42,7 +44,9 @@ export default function VideoUploadModal({ isOpen, onClose }) {
             <div className="md:col-span-2">
               <label className="block text-sm font-bold text-[#334155] mb-2">Custom Thumbnail (Optional)</label>
               <div className="border-2 border-dashed border-[#CBD5E1] rounded-xl p-6 text-center hover:bg-[#F8FAFC] transition cursor-pointer flex flex-col items-center justify-center">
-                <span className="text-2xl mb-2">🖼️</span>
+                <svg className="w-8 h-8 mx-auto text-[#94A3B8] group-hover:text-[#2563EB] mb-3 group-hover:scale-110 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
                 <span className="text-sm text-[#64748B] font-bold">Upload cover image</span>
               </div>
             </div>

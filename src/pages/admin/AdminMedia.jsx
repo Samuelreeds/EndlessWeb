@@ -13,6 +13,18 @@ export default function AdminMedia() {
     { id: 6, type: 'image', name: 'app-mockup.png', size: '890 KB', date: 'Oct 20, 2023' },
   ];
 
+  const ImageSvg = () => (
+    <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+    </svg>
+  );
+
+  const VideoSvg = () => (
+    <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+    </svg>
+  );
+
   return (
     <div className="space-y-6 animate-[fadeIn_0.3s_ease-out]">
       <div>
@@ -21,9 +33,9 @@ export default function AdminMedia() {
       </div>
 
       {/* Drag & Drop Area */}
-      <div className="border-2 border-dashed border-[#CBD5E1] rounded-2xl p-10 text-center hover:bg-[#F8FAFC] transition-colors cursor-pointer bg-white group">
-        <div className="w-16 h-16 bg-[#EFF6FF] text-[#2563EB] rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-          <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" /></svg>
+      <div className="border-2 border-dashed border-[#CBD5E1] rounded-2xl p-10 text-center hover:bg-[#F8FAFC] hover:border-[#94A3B8] transition-all cursor-pointer bg-white group shadow-sm">
+        <div className="w-16 h-16 bg-[#EFF6FF] text-[#2563EB] rounded-full flex items-center justify-center mx-auto mb-4 group-hover:scale-110 group-hover:bg-[#DBEAFE] transition-all">
+          <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
         </div>
         <h3 className="text-[16px] font-bold text-[#0A1628] mb-1">Click to upload or drag and drop</h3>
         <p className="text-[13px] font-medium text-[#64748B]">SVG, PNG, JPG or MP4 (max. 50MB)</p>
@@ -32,7 +44,9 @@ export default function AdminMedia() {
       {/* Controls */}
       <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
         <div className="relative w-full sm:w-96">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#94A3B8]">🔍</span>
+          <svg className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#94A3B8]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
           <input 
             type="text" 
             placeholder="Search files..." 
@@ -52,13 +66,13 @@ export default function AdminMedia() {
           <div 
             key={file.id} 
             onClick={() => setSelectedMedia(file)}
-            className="group relative aspect-square bg-[#F1F5F9] rounded-xl border border-[#E2E8F0] overflow-hidden cursor-pointer hover:border-[#2563EB] transition-colors shadow-sm"
+            className="group relative aspect-square bg-[#F8FAFC] rounded-xl border border-[#E2E8F0] overflow-hidden cursor-pointer hover:border-[#2563EB] hover:shadow-md transition-all flex items-center justify-center"
           >
-            <div className="absolute inset-0 flex items-center justify-center text-[#94A3B8] font-bold text-4xl">
-              {file.type === 'video' ? '🎬' : '🖼️'}
+            <div className="text-[#94A3B8] group-hover:text-[#2563EB] group-hover:scale-110 transition-transform">
+              {file.type === 'video' ? <VideoSvg /> : <ImageSvg />}
             </div>
             
-            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0A1628]/80 to-transparent p-3 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all">
+            <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-[#0A1628]/90 to-transparent p-3 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all">
               <p className="text-white text-xs font-bold truncate">{file.name}</p>
               <p className="text-white/70 text-[10px] font-medium mt-0.5">{file.size}</p>
             </div>

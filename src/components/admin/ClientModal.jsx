@@ -40,7 +40,9 @@ export default function ClientModal({ isOpen, onClose }) {
             <div>
               <label className="block text-sm font-bold text-[#334155] mb-2">Client Logo</label>
               <div className="border-2 border-dashed border-[#CBD5E1] rounded-xl p-8 text-center hover:bg-[#F8FAFC] transition cursor-pointer group">
-                <span className="text-3xl mb-3 block group-hover:scale-110 transition-transform">📁</span>
+                <svg className="w-12 h-12 mx-auto mb-3 text-[#94A3B8] group-hover:text-[#2563EB] transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+                </svg>
                 <span className="text-sm text-[#64748B] font-bold">Click to upload or drag and drop</span>
                 <p className="text-xs text-[#94A3B8] mt-2 font-medium">PNG, JPG, SVG up to 2MB</p>
               </div>

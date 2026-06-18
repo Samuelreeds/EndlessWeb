@@ -9,7 +9,10 @@ export default function AdminSettings() {
           <p className="text-[#64748B] mt-1 font-medium">Manage your company profile and website preferences.</p>
         </div>
         <button className="bg-[#2563EB] hover:bg-[#1E4D99] text-white px-8 py-2.5 rounded-xl font-bold transition-all shadow-md shadow-blue-500/20 flex items-center gap-2">
-          <span>💾</span> Save Changes
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
+          </svg>
+          <span>Save Changes</span>
         </button>
       </div>
 
@@ -24,8 +27,10 @@ export default function AdminSettings() {
             <div className="w-32 h-32 bg-[#F1F5F9] border border-[#E2E8F0] rounded-2xl flex items-center justify-center flex-shrink-0 shadow-inner">
               <span className="font-extrabold text-2xl text-[#0A1628] tracking-tighter">ENDLESS<span className="text-[#2563EB]">.</span></span>
             </div>
-            <div className="flex-1 w-full border-2 border-dashed border-[#CBD5E1] rounded-2xl p-8 text-center hover:bg-[#F8FAFC] transition cursor-pointer group">
-              <span className="text-2xl mb-2 block group-hover:scale-110 transition-transform">🖼️</span>
+            <div className="flex-1 w-full border-2 border-dashed border-[#CBD5E1] rounded-2xl p-8 text-center hover:bg-[#F8FAFC] hover:border-[#94A3B8] transition-all cursor-pointer group">
+              <svg className="w-8 h-8 mx-auto text-[#94A3B8] group-hover:text-[#2563EB] mb-3 group-hover:scale-110 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
               <span className="text-[14px] text-[#0A1628] font-bold block mb-1">Click to upload new logo</span>
               <span className="text-[12px] text-[#64748B] font-medium">SVG, PNG, or JPG (Recommended size: 400x100px)</span>
             </div>

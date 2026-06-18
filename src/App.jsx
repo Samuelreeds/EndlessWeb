@@ -22,9 +22,11 @@ import AdminMedia from './pages/admin/AdminMedia';
 import AdminUsers from './pages/admin/AdminUsers';
 import AdminSettings from './pages/admin/AdminSettings';
 
+
 // Security: Protected Route Wrapper
 const ProtectedRoute = () => {
-  const token = localStorage.getItem('adminToken');
+  // Changed from 'adminToken' to 'token' to match your local storage[cite: 8]
+  const token = localStorage.getItem('token'); 
   return token ? <Outlet /> : <Navigate to="/admin/login" replace />;
 };
 
@@ -58,6 +60,9 @@ export default function App() {
 
         {/* --- ADMIN DASHBOARD --- */}
         <Route path="/admin/login" element={<AdminLogin />} />
+        
+        {/* Catch the /login redirect from the topbar and send it to /admin/login[cite: 8] */}
+        <Route path="/login" element={<Navigate to="/admin/login" replace />} />
         
         {/* Protected Admin Routes */}
         <Route path="/admin" element={<ProtectedRoute />}>

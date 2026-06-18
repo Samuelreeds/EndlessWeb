@@ -1,6 +1,14 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function AdminTopbar({ onMenuClick }) {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    // Adjust '/login' if your login route is named differently
+    navigate('/login'); 
+  };
+
   return (
     <header className="h-16 lg:h-24 bg-white/80 backdrop-blur-md border-b border-[#E2E8F0] flex items-center justify-between px-4 sm:px-6 lg:px-10 z-10 sticky top-0 shadow-sm">
       <div className="flex items-center gap-4">
@@ -17,11 +25,17 @@ export default function AdminTopbar({ onMenuClick }) {
       </div>
       
       <div className="flex items-center gap-4 sm:gap-6">
-        <Link to="/" target="_blank" className="text-[14px] font-bold text-[#2563EB] hover:text-[#1E4D99] transition-colors flex items-center gap-2">
-          <span className="hidden sm:inline">View Live Site</span> <span className="text-lg leading-none">↗</span>
+        <Link to="/" target="_blank" className="text-[14px] font-bold text-[#2563EB] hover:text-[#1E4D99] transition-colors flex items-center gap-1.5">
+          <span className="hidden sm:inline">View Live Site</span>
+          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          </svg>
         </Link>
         <div className="w-px h-8 bg-[#E2E8F0] hidden sm:block"></div>
-        <button className="text-[14px] font-bold bg-white border-2 border-[#E2E8F0] hover:border-[#CBD5E1] text-[#0A1628] py-2 px-4 sm:py-2.5 sm:px-6 rounded-xl transition-all shadow-sm hover:shadow focus:ring-2 focus:ring-[#2563EB] outline-none">
+        <button 
+          onClick={handleLogout}
+          className="text-[14px] font-bold bg-white border-2 border-[#E2E8F0] hover:border-[#CBD5E1] text-[#0A1628] py-2 px-4 sm:py-2.5 sm:px-6 rounded-xl transition-all shadow-sm hover:shadow focus:ring-2 focus:ring-[#2563EB] outline-none"
+        >
           Logout
         </button>
       </div>

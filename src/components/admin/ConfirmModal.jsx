@@ -1,4 +1,4 @@
-export default function ConfirmModal({ isOpen, onClose, title, message, confirmText = "Confirm", isDestructive = false }) {
+export default function ConfirmModal({ isOpen, onClose, onConfirm, title, message, confirmText = "Confirm", isDestructive = false }) {
   if (!isOpen) return null;
 
   return (
@@ -30,7 +30,7 @@ export default function ConfirmModal({ isOpen, onClose, title, message, confirmT
             Cancel
           </button>
           <button 
-            onClick={onClose} 
+            onClick={onConfirm} 
             className={`px-6 py-2.5 w-full text-sm font-bold text-white rounded-xl shadow-md transition-all ${
               isDestructive 
                 ? 'bg-red-600 hover:bg-red-700 shadow-red-500/20' 
