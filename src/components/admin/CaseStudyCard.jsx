@@ -1,119 +1,71 @@
-export default function CaseStudyModal({ isOpen, onClose }) {
-  if (!isOpen) return null;
+export default function CaseStudyCard({ study, onEdit, onDelete }) {
+  // Handle parsing the JSON results safely
+  let metrics = [];
+  try {
+    if (typeof study.results === 'string') {
+      metrics = JSON.parse(study.results);
+    } else if (Array.isArray(study.results)) {
+      metrics = study.results;
+    }
+  } catch (e) {
+    console.error("Error parsing metrics JSON", e);
+  }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0A1628]/40 backdrop-blur-sm p-4 sm:p-6 lg:p-8 animate-[fadeIn_0.2s_ease-out]">
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden border border-[#E2E8F0]">
-        
-        {/* Header */}
-        <div className="px-8 py-5 border-b border-[#F1F5F9] flex justify-between items-center bg-[#F8FAFC] flex-shrink-0">
-          <h2 className="text-xl font-extrabold text-[#0A1628]">Create Case Study</h2>
-          <button onClick={onClose} className="text-[#94A3B8] hover:text-[#0A1628] text-xl transition-colors">✕</button>
+    <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-sm overflow-hidden flex flex-col group transition-all hover:shadow-md">
+      {/* Image Header */}
+      <div className="h-48 bg-[#F8FAFC] border-b border-[#E2E8F0] relative overflow-hidden flex-shrink-0 flex items-center justify-center">
+        {study.imageUrl ? (
+          <img src={study.imageUrl} alt={study.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+        ) : (
+          <div className="text-[#94A3B8] flex flex-col items-center">
+            <svg className="w-10 h-10 mb-2 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <span className="text-sm font-bold">No Image Provided</span>
+          </div>
+        )}
+        <div className="absolute top-4 left-4">
+          <span className="bg-white/90 backdrop-blur-sm px-3 py-1 text-xs font-bold text-[#2563EB] rounded-full shadow-sm border border-white/20">
+            {study.tag}
+          </span>
         </div>
-        
-        {/* Scrollable Form Body */}
-        <div className="p-8 overflow-y-auto flex-1">
-          <form className="space-y-8">
-            
-            {/* Basic Info */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-sm font-bold text-[#334155] mb-2">Title</label>
-                <input 
-                  type="text" 
-                  className="w-full px-4 py-3 rounded-xl border border-[#E2E8F0] focus:ring-2 focus:ring-[#2563EB] focus:border-transparent outline-none transition font-medium text-sm" 
-                  placeholder="e.g. From Zero Engagement to 22 DMs" 
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-bold text-[#334155] mb-2">Category</label>
-                <input 
-                  type="text" 
-                  className="w-full px-4 py-3 rounded-xl border border-[#E2E8F0] focus:ring-2 focus:ring-[#2563EB] focus:border-transparent outline-none transition font-medium text-sm" 
-                  placeholder="e.g. F&B Business" 
-                />
-              </div>
-            </div>
+      </div>
 
-            {/* Narrative */}
-            <div className="space-y-6">
-              <div>
-                <label className="block text-sm font-bold text-[#334155] mb-2">Challenge</label>
-                <textarea 
-                  rows="3"
-                  className="w-full px-4 py-3 rounded-xl border border-[#E2E8F0] focus:ring-2 focus:ring-[#2563EB] focus:border-transparent outline-none transition font-medium text-sm resize-none" 
-                  placeholder="What was the client struggling with?" 
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-bold text-[#334155] mb-2">Approach</label>
-                <textarea 
-                  rows="3"
-                  className="w-full px-4 py-3 rounded-xl border border-[#E2E8F0] focus:ring-2 focus:ring-[#2563EB] focus:border-transparent outline-none transition font-medium text-sm resize-none" 
-                  placeholder="How did Endless solve this problem?" 
-                />
-              </div>
-            </div>
+      {/* Content Body */}
+      <div className="p-6 flex-1 flex flex-col">
+        <h3 className="text-xl font-extrabold text-[#0A1628] leading-tight mb-3 line-clamp-2">
+          {study.title}
+        </h3>
+        <p className="text-sm font-medium text-[#64748B] mb-6 line-clamp-3">
+          <span className="font-bold text-[#334155]">Challenge:</span> {study.challenge}
+        </p>
 
-            {/* Visuals */}
-            <div>
-              <label className="block text-sm font-bold text-[#334155] mb-4">Transformation Images</label>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="border-2 border-dashed border-[#CBD5E1] rounded-xl p-8 text-center hover:bg-[#F8FAFC] transition cursor-pointer group">
-                  <span className="text-2xl mb-2 block group-hover:scale-110 transition-transform">📸</span>
-                  <span className="text-sm text-[#64748B] font-bold">Upload Before Image</span>
-                </div>
-                <div className="border-2 border-dashed border-[#CBD5E1] rounded-xl p-8 text-center hover:bg-[#EFF6FF] hover:border-[#BFDBFE] transition cursor-pointer group bg-[#F8FAFC]">
-                  <span className="text-2xl mb-2 block group-hover:scale-110 transition-transform">✨</span>
-                  <span className="text-sm text-[#2563EB] font-bold">Upload After Image</span>
-                </div>
-              </div>
+        {/* Metrics Grid */}
+        <div className="grid grid-cols-2 gap-3 mb-6 mt-auto">
+          {metrics && metrics.slice(0, 2).map((metric, idx) => (
+            <div key={idx} className="bg-[#F1F5F9] rounded-xl p-3 border border-[#E2E8F0]">
+              <div className="text-lg font-black text-[#0A1628]">{metric.value || metric.num}</div>
+              <div className="text-[11px] font-bold text-[#64748B] uppercase tracking-wide truncate">{metric.label || metric.lbl}</div>
             </div>
-
-            {/* Results / Metrics */}
-            <div>
-              <div className="flex justify-between items-center mb-4">
-                <label className="block text-sm font-bold text-[#334155]">Key Results</label>
-                <button type="button" className="text-[12px] font-bold text-[#2563EB] hover:underline">＋ Add Metric</button>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {[1, 2, 3].map((num) => (
-                  <div key={num} className="bg-[#F8FAFC] p-4 rounded-xl border border-[#E2E8F0]">
-                    <input 
-                      type="text" 
-                      placeholder="Value (e.g. 4.4x)" 
-                      className="w-full px-3 py-2 mb-2 rounded-lg border border-[#CBD5E1] font-bold text-[#0A1628] focus:ring-2 focus:ring-[#2563EB] outline-none text-sm"
-                    />
-                    <input 
-                      type="text" 
-                      placeholder="Label (e.g. Followers)" 
-                      className="w-full px-3 py-2 rounded-lg border border-[#CBD5E1] font-medium text-[#64748B] focus:ring-2 focus:ring-[#2563EB] outline-none text-sm"
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-
-          </form>
+          ))}
+          {metrics && metrics.length > 2 && (
+             <div className="col-span-2 text-xs font-bold text-[#94A3B8] text-center pt-1">
+               + {metrics.length - 2} more results
+             </div>
+          )}
         </div>
 
-        {/* Footer Actions */}
-        <div className="px-8 py-5 border-t border-[#F1F5F9] bg-white flex justify-end gap-3 flex-shrink-0">
-          <button 
-            type="button" 
-            onClick={onClose} 
-            className="px-6 py-2.5 text-sm font-bold text-[#64748B] hover:bg-[#F1F5F9] rounded-xl transition-colors"
-          >
-            Cancel
-          </button>
-          <button 
-            type="button" 
-            className="px-6 py-2.5 text-sm font-bold text-white bg-[#2563EB] hover:bg-[#1E4D99] rounded-xl shadow-md shadow-blue-500/20 transition-all"
-          >
-            Publish Case Study
-          </button>
+        {/* Actions Footer */}
+        <div className="pt-4 border-t border-[#F1F5F9] flex justify-between items-center">
+          <span className="text-xs font-bold text-[#94A3B8]">
+            {new Date(study.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+          </span>
+          <div className="space-x-3">
+            <button onClick={() => onEdit(study)} className="text-[#64748B] hover:text-[#2563EB] font-bold text-sm transition-colors">Edit</button>
+            <button onClick={() => onDelete(study.id)} className="text-[#64748B] hover:text-red-500 font-bold text-sm transition-colors">Delete</button>
+          </div>
         </div>
-        
       </div>
     </div>
   );

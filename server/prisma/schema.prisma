@@ -48,6 +48,7 @@ model Testimonial {
 model VideoTestimonial {
   id        String   @id @default(uuid())
   videoUrl  String
+  thumbnailUrl String?
   label     String
   subtext   String
   createdAt DateTime @default(now())

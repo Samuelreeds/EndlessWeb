@@ -7,6 +7,7 @@ import VideoTestimonialsSection from '../sections/home/VideoTestimonialsSection'
 import FinalCTASection from '../sections/home/FinalCTASection';
 import ClientLogos from '../components/ClientLogos';
 
+
 export default function Home() {
   return (
     <div className="page active">
@@ -17,6 +18,7 @@ export default function Home() {
       <BeforeAfterSection />
       <TestimonialsSection />
       <VideoTestimonialsSection />
+
       <FinalCTASection />
     </div>
   );

@@ -1,32 +1,55 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import CaseStudyCard from '../../components/admin/CaseStudyCard';
 import CaseStudyModal from '../../components/admin/CaseStudyModal';
 
 export default function AdminCaseStudies() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [caseStudies, setCaseStudies] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [editingStudy, setEditingStudy] = useState(null);
 
-  const mockCaseStudies = [
-    {
-      id: 1,
-      title: 'From Zero Engagement to 22 DMs Per Week',
-      category: 'F&B Business',
-      challenge: 'No consistent content, zero engagement, outdated visuals that didn\'t reflect the quality of the business at all.',
-      metrics: [
-        { value: '4.4×', label: 'Followers in 90 days' },
-        { value: '14×', label: 'Average post reach' }
-      ]
-    },
-    {
-      id: 2,
-      title: 'Engagement Up 575% in Two Months',
-      category: 'Boutique Retail',
-      challenge: 'Inconsistent posting, no brand voice, and an engagement rate so low the algorithm had stopped showing posts.',
-      metrics: [
-        { value: '5.4%', label: 'Engagement rate' },
-        { value: '3×', label: 'Story views in 60 days' }
-      ]
+  const fetchCaseStudies = async () => {
+    try {
+      const res = await fetch('http://localhost:5000/api/cms/case-studies');
+      if (!res.ok) throw new Error('Failed to fetch case studies');
+      const data = await res.json();
+      setCaseStudies(data);
+    } catch (err) {
+      console.error('Error fetching case studies:', err);
+    } finally {
+      setIsLoading(false);
     }
-  ];
+  };
+
+  useEffect(() => {
+    fetchCaseStudies();
+  }, []);
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this case study?')) return;
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`http://localhost:5000/api/cms/case-studies/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!res.ok) throw new Error('Failed to delete case study');
+      fetchCaseStudies();
+    } catch (err) {
+      console.error('Error deleting case study:', err);
+      alert('Failed to delete case study.');
+    }
+  };
+
+  const handleEdit = (study) => {
+    setEditingStudy(study);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEditingStudy(null);
+  };
 
   return (
     <div className="space-y-6 animate-[fadeIn_0.3s_ease-out]">
@@ -36,20 +59,40 @@ export default function AdminCaseStudies() {
           <p className="text-[#64748B] mt-1 font-medium">Create and manage your success stories and portfolio.</p>
         </div>
         <button 
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => { setEditingStudy(null); setIsModalOpen(true); }}
           className="bg-[#2563EB] hover:bg-[#1E4D99] text-white px-5 py-2.5 rounded-xl font-bold transition-all shadow-sm shadow-blue-500/20 flex items-center gap-2"
         >
-          <span>＋</span> Create Case Study
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" /></svg> Create Case Study
         </button>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        {mockCaseStudies.map(study => (
-          <CaseStudyCard key={study.id} study={study} />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="p-12 text-center text-[#64748B] font-medium bg-white rounded-2xl border border-[#E2E8F0]">
+          Loading case studies...
+        </div>
+      ) : caseStudies.length === 0 ? (
+        <div className="p-12 text-center bg-white rounded-2xl border border-[#E2E8F0]">
+          <p className="text-[#64748B] font-medium">No case studies found. Click "Create Case Study" to add one.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 xl:grid-cols-3 lg:grid-cols-2 gap-6">
+          {caseStudies.map(study => (
+            <CaseStudyCard 
+              key={study.id} 
+              study={study} 
+              onEdit={handleEdit} 
+              onDelete={handleDelete} 
+            />
+          ))}
+        </div>
+      )}
 
-      <CaseStudyModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <CaseStudyModal 
+        isOpen={isModalOpen} 
+        onClose={handleCloseModal} 
+        onSuccess={fetchCaseStudies}
+        studyToEdit={editingStudy}
+      />
     </div>
   );
 }

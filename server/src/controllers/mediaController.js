@@ -8,21 +8,33 @@ export const uploadMedia = async (req, res) => {
       return res.status(400).json({ error: 'No file provided' });
     }
 
-    // 1. Process image with Sharp
-    // Sharp automatically detects format from buffer and converts to WebP
-    const processedImageBuffer = await sharp(req.file.buffer)
-      .resize({ width: 1200, withoutEnlargement: true })
-      .webp({ quality: 80 }) 
-      .toBuffer();
-
     const uniqueId = crypto.randomUUID();
-    const fileName = `${uniqueId}.webp`;
+    let fileBuffer;
+    let fileName;
+    let contentType = req.file.mimetype;
 
-    // 2. Upload to Supabase Storage
+    // 1. Check if the file is a video
+    if (req.file.mimetype.startsWith('video/')) {
+      // Bypass Sharp, keep original buffer and detect extension
+      fileBuffer = req.file.buffer;
+      const ext = req.file.originalname ? req.file.originalname.split('.').pop() : 'mp4';
+      fileName = `${uniqueId}.${ext}`;
+    } else {
+      // 2. Process images with Sharp
+      fileBuffer = await sharp(req.file.buffer)
+        .resize({ width: 1200, withoutEnlargement: true })
+        .webp({ quality: 80 }) 
+        .toBuffer();
+        
+      fileName = `${uniqueId}.webp`;
+      contentType = 'image/webp'; // Always webp for images
+    }
+
+    // 3. Upload to Supabase Storage
     const { data, error } = await supabase.storage
       .from('site-assets')
-      .upload(fileName, processedImageBuffer, {
-        contentType: 'image/webp', // Always webp
+      .upload(fileName, fileBuffer, {
+        contentType: contentType,
         cacheControl: '3600',
         upsert: false,
       });
@@ -36,6 +48,6 @@ export const uploadMedia = async (req, res) => {
     res.status(200).json({ url: publicUrlData.publicUrl });
   } catch (error) {
     console.error('Conversion/Upload error:', error);
-    res.status(500).json({ error: 'Failed to process and upload image' });
+    res.status(500).json({ error: 'Failed to process and upload media' });
   }
 };

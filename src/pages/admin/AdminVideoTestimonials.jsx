@@ -1,22 +1,55 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import VideoCard from '../../components/admin/VideoCard';
 import VideoUploadModal from '../../components/admin/VideoUploadModal';
 
 export default function AdminVideoTestimonials() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [videos, setVideos] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [editingVideo, setEditingVideo] = useState(null);
 
-  const mockVideos = [
-    {
-      id: 1,
-      title: 'Sarah K. Success Story',
-      subtitle: 'Café Owner - 500% ROI in 3 months',
-    },
-    {
-      id: 2,
-      title: 'Marcus D. Review',
-      subtitle: 'Fitness Studio - Brand Transformation',
+  const fetchVideos = async () => {
+    try {
+      const res = await fetch('http://localhost:5000/api/cms/video-testimonials');
+      if (!res.ok) throw new Error('Failed to fetch videos');
+      const data = await res.json();
+      setVideos(data);
+    } catch (err) {
+      console.error('Error fetching videos:', err);
+    } finally {
+      setIsLoading(false);
     }
-  ];
+  };
+
+  useEffect(() => {
+    fetchVideos();
+  }, []);
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this video?')) return;
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`http://localhost:5000/api/cms/video-testimonials/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (!res.ok) throw new Error('Failed to delete video');
+      fetchVideos();
+    } catch (err) {
+      console.error('Error deleting video:', err);
+      alert('Failed to delete video.');
+    }
+  };
+
+  const handleEdit = (video) => {
+    setEditingVideo(video);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setEditingVideo(null);
+  };
 
   return (
     <div className="space-y-6 animate-[fadeIn_0.3s_ease-out]">
@@ -26,20 +59,40 @@ export default function AdminVideoTestimonials() {
           <p className="text-[#64748B] mt-1 font-medium">Manage client video reviews and success stories.</p>
         </div>
         <button 
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => { setEditingVideo(null); setIsModalOpen(true); }}
           className="bg-[#2563EB] hover:bg-[#1E4D99] text-white px-5 py-2.5 rounded-xl font-bold transition-all shadow-sm shadow-blue-500/20 flex items-center gap-2"
         >
-          <span>＋</span> Add Video
+          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" /></svg> Add Video
         </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {mockVideos.map(video => (
-          <VideoCard key={video.id} video={video} />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="p-12 text-center text-[#64748B] font-medium bg-white rounded-2xl border border-[#E2E8F0]">
+          Loading videos...
+        </div>
+      ) : videos.length === 0 ? (
+        <div className="p-12 text-center bg-white rounded-2xl border border-[#E2E8F0]">
+          <p className="text-[#64748B] font-medium">No videos found. Click "Add Video" to upload one.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {videos.map(video => (
+            <VideoCard 
+              key={video.id} 
+              video={video} 
+              onEdit={handleEdit} 
+              onDelete={handleDelete} 
+            />
+          ))}
+        </div>
+      )}
 
-      <VideoUploadModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+      <VideoUploadModal 
+        isOpen={isModalOpen} 
+        onClose={handleCloseModal} 
+        onSuccess={fetchVideos}
+        videoToEdit={editingVideo}
+      />
     </div>
   );
 }
