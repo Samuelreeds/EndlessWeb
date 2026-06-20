@@ -5,44 +5,37 @@ import crypto from 'crypto';
 export const uploadMedia = async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ error: 'No image file provided' });
+      return res.status(400).json({ error: 'No file provided' });
     }
 
     // 1. Process image with Sharp
+    // Sharp automatically detects format from buffer and converts to WebP
     const processedImageBuffer = await sharp(req.file.buffer)
       .resize({ width: 1200, withoutEnlargement: true })
-      .webp({ quality: 80 })
+      .webp({ quality: 80 }) 
       .toBuffer();
 
-    // 2. Generate a unique filename
     const uniqueId = crypto.randomUUID();
     const fileName = `${uniqueId}.webp`;
 
-    // 3. Upload to Supabase Storage
+    // 2. Upload to Supabase Storage
     const { data, error } = await supabase.storage
-      .from('SITE-ASSETS')
+      .from('site-assets')
       .upload(fileName, processedImageBuffer, {
-        contentType: 'image/webp',
+        contentType: 'image/webp', // Always webp
         cacheControl: '3600',
         upsert: false,
       });
 
-    if (error) {
-      console.error('Supabase upload error:', error);
-      return res.status(500).json({ error: 'Failed to upload image to storage' });
-    }
+    if (error) throw error;
 
-    // 4. Retrieve the Public URL
     const { data: publicUrlData } = supabase.storage
-      .from('SITE-ASSETS')
+      .from('site-assets')
       .getPublicUrl(fileName);
 
-    res.status(200).json({
-      message: 'Image uploaded successfully',
-      url: publicUrlData.publicUrl,
-    });
+    res.status(200).json({ url: publicUrlData.publicUrl });
   } catch (error) {
-    console.error('Media upload error:', error);
-    res.status(500).json({ error: 'Internal server error during media upload' });
+    console.error('Conversion/Upload error:', error);
+    res.status(500).json({ error: 'Failed to process and upload image' });
   }
 };

@@ -315,11 +315,12 @@ footer{background:var(--blue-900);padding:64px 24px 40px}
 /* Auto-Sliding Logos */
 .logo-slider-container {
   overflow: hidden;
-  white-space: nowrap;
   width: 100%;
+  white-space: nowrap;
   position: relative;
-  max-width: 1600px; 
-  margin: 0 auto;
+  /* Optional: Adds a nice fade effect on the left and right edges */
+  mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
 }
 .logo-slider-container::before, .logo-slider-container::after {
   content: '';
@@ -339,18 +340,21 @@ footer{background:var(--blue-900);padding:64px 24px 40px}
   background: linear-gradient(to left, white 0%, rgba(255,255,255,0) 100%);
 }
 .logo-track {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 80px;
-  padding-right: 80px;
-  animation: slideLogos 35s linear infinite; 
+  gap: 4rem; /* Space between logos */
+  width: max-content;
+  
+  /* THIS CONTROLS THE SPEED AND LOOP */
+  /* Change '15s' to a lower number (like 10s) to make it faster, or higher (30s) for slower */
+  animation: slide-left 15s linear infinite; 
 }
 .logo-track:hover {
   animation-play-state: paused;
 }
-@keyframes slideLogos {
+@keyframes slide-left {
   0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); } 
+  100% { transform: translateX(-100%); } 
 }
 
 /* Modern SaaS Pricing UI */
