@@ -69,6 +69,30 @@ const createController = (modelName) => ({
   }
 });
 
+// Add this new StatsController object to the end of the file
+export const StatsController = {
+  getStats: async (req, res) => {
+    try {
+      const [clients, testimonials, videos, caseStudies] = await Promise.all([
+        prisma.clientLogo.count(),
+        prisma.testimonial.count(),
+        prisma.videoTestimonial.count(),
+        prisma.caseStudy.count()
+      ]);
+
+      res.json({
+        clients,
+        testimonials,
+        videos,
+        caseStudies
+      });
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+      res.status(500).json({ error: 'Failed to fetch dashboard statistics' });
+    }
+  }
+};
+
 
 // Export controllers for each specific model
 export const ClientLogoController = createController('clientLogo');

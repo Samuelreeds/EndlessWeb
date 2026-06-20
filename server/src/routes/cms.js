@@ -4,7 +4,8 @@ import {
   ClientLogoController, 
   TestimonialController, 
   VideoTestimonialController, 
-  CaseStudyController 
+  CaseStudyController,
+  StatsController // ADD THIS IMPORT
 } from '../controllers/cmsController.js';
 
 const router = express.Router();
@@ -23,5 +24,5 @@ mapCrudRoutes('/client-logos', ClientLogoController);
 mapCrudRoutes('/testimonials', TestimonialController);
 mapCrudRoutes('/video-testimonials', VideoTestimonialController);
 mapCrudRoutes('/case-studies', CaseStudyController);
-
+router.get('/stats', StatsController.getStats);
 export default router;

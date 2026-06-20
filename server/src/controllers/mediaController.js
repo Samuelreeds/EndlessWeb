@@ -51,3 +51,68 @@ export const uploadMedia = async (req, res) => {
     res.status(500).json({ error: 'Failed to process and upload media' });
   }
 };
+
+// ... (keep your existing uploadMedia function) ...
+
+export const listMedia = async (req, res) => {
+  try {
+    const { data, error } = await supabase.storage
+      .from('site-assets')
+      .list(); // Lists all files in the bucket
+
+    if (error) throw error;
+
+    // Map the raw Supabase data into a format the frontend expects
+    const formattedData = data
+      // Filter out empty folder placeholders
+      .filter(file => file.name !== '.emptyFolderPlaceholder')
+      .map(file => {
+        const publicUrlData = supabase.storage
+          .from('site-assets')
+          .getPublicUrl(file.name);
+        
+        // Determine type based on extension or mimetype if available
+        let type = 'image';
+        if (file.metadata?.mimetype?.startsWith('video/') || file.name.match(/\.(mp4|webm|ogg)$/i)) {
+          type = 'video';
+        }
+
+        return {
+          id: file.id || file.name,
+          name: file.name,
+          type: type,
+          size: file.metadata?.size || 0,
+          date: file.created_at,
+          url: publicUrlData.data.publicUrl
+        };
+      })
+      // Sort newest first
+      .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    res.status(200).json(formattedData);
+  } catch (error) {
+    console.error('List media error:', error);
+    res.status(500).json({ error: 'Failed to fetch media library' });
+  }
+};
+
+export const deleteMedia = async (req, res) => {
+  try {
+    const { fileName } = req.params;
+    
+    if (!fileName) {
+      return res.status(400).json({ error: 'File name is required' });
+    }
+
+    const { data, error } = await supabase.storage
+      .from('site-assets')
+      .remove([fileName]);
+
+    if (error) throw error;
+
+    res.status(200).json({ message: 'File deleted successfully', data });
+  } catch (error) {
+    console.error('Delete media error:', error);
+    res.status(500).json({ error: 'Failed to delete file' });
+  }
+};

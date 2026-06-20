@@ -1,11 +1,13 @@
 import express from 'express';
-import { uploadMedia } from '../controllers/mediaController.js';
+import { uploadMedia, listMedia, deleteMedia } from '../controllers/mediaController.js';
 import { upload } from '../middleware/upload.js';
-import { verifyToken } from '../middleware/authMiddleware.js'; // Adjust path if your auth middleware is named differently
+import { verifyToken } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-// Protected route: expects an auth token and a multipart form with field name "image"
 router.post('/upload', verifyToken, upload.single('image'), uploadMedia);
+// NEW: Routes for the media library UI
+router.get('/', listMedia); 
+router.delete('/:fileName', verifyToken, deleteMedia);
 
 export default router;
