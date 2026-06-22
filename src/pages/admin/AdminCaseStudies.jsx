@@ -1,42 +1,33 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import CaseStudyCard from '../../components/admin/CaseStudyCard';
 import CaseStudyModal from '../../components/admin/CaseStudyModal';
+import { api } from '../../utils/api';
+import { useCache } from '../../utils/useCache';
 
 export default function AdminCaseStudies() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [caseStudies, setCaseStudies] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [editingStudy, setEditingStudy] = useState(null);
 
-  const fetchCaseStudies = async () => {
+  // Use memory cache
+  const { data, isLoading, updateCache } = useCache('case_studies', '/cms/case-studies');
+  const caseStudies = data || [];
+
+  const refreshData = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/cms/case-studies');
-      if (!res.ok) throw new Error('Failed to fetch case studies');
-      const data = await res.json();
-      setCaseStudies(data);
+      const res = await api.fetch('/cms/case-studies');
+      const freshData = await res.json();
+      updateCache(Array.isArray(freshData) ? freshData : []);
     } catch (err) {
-      console.error('Error fetching case studies:', err);
-    } finally {
-      setIsLoading(false);
+      console.error('Error refreshing case studies:', err);
     }
   };
-
-  useEffect(() => {
-    fetchCaseStudies();
-  }, []);
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this case study?')) return;
     try {
-      const token = localStorage.getItem('token');
-      const res = await fetch(`http://localhost:5000/api/cms/case-studies/${id}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (!res.ok) throw new Error('Failed to delete case study');
-      fetchCaseStudies();
+      await api.fetch(`/cms/case-studies/${id}`, { method: 'DELETE' });
+      refreshData();
     } catch (err) {
-      console.error('Error deleting case study:', err);
       alert('Failed to delete case study.');
     }
   };
@@ -44,11 +35,6 @@ export default function AdminCaseStudies() {
   const handleEdit = (study) => {
     setEditingStudy(study);
     setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setEditingStudy(null);
   };
 
   return (
@@ -89,8 +75,8 @@ export default function AdminCaseStudies() {
 
       <CaseStudyModal 
         isOpen={isModalOpen} 
-        onClose={handleCloseModal} 
-        onSuccess={fetchCaseStudies}
+        onClose={() => { setIsModalOpen(false); setEditingStudy(null); }} 
+        onSuccess={refreshData}
         studyToEdit={editingStudy}
       />
     </div>

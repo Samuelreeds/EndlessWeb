@@ -17,7 +17,6 @@ export default function Navbar() {
               src={logo} 
               alt="Endless Logo" 
               style={{ height: '70px', cursor: 'pointer', mixBlendMode: 'multiply' }} 
-              onClick={() => navigate('/')} 
             />
           </div>
           <div className="nav-links">

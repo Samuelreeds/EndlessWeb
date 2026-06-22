@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-
 import PublicLayout from './layouts/PublicLayout';
 import AdminLayout from './layouts/AdminLayout';
 
+
 // Public Pages
 import Home from './pages/Home';
 import Pricing from './pages/Pricing';

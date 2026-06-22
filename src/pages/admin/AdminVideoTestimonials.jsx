@@ -1,42 +1,33 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import VideoCard from '../../components/admin/VideoCard';
 import VideoUploadModal from '../../components/admin/VideoUploadModal';
+import { api } from '../../utils/api';
+import { useCache } from '../../utils/useCache';
 
 export default function AdminVideoTestimonials() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [videos, setVideos] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [editingVideo, setEditingVideo] = useState(null);
 
-  const fetchVideos = async () => {
+  // Use memory cache
+  const { data, isLoading, updateCache } = useCache('videos', '/cms/video-testimonials');
+  const videos = data || [];
+
+  const refreshData = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/cms/video-testimonials');
-      if (!res.ok) throw new Error('Failed to fetch videos');
-      const data = await res.json();
-      setVideos(data);
+      const res = await api.fetch('/cms/video-testimonials');
+      const freshData = await res.json();
+      updateCache(Array.isArray(freshData) ? freshData : []);
     } catch (err) {
-      console.error('Error fetching videos:', err);
-    } finally {
-      setIsLoading(false);
+      console.error('Error refreshing videos:', err);
     }
   };
-
-  useEffect(() => {
-    fetchVideos();
-  }, []);
 
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this video?')) return;
     try {
-      const token = localStorage.getItem('token');
-      const res = await fetch(`http://localhost:5000/api/cms/video-testimonials/${id}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': `Bearer ${token}` }
-      });
-      if (!res.ok) throw new Error('Failed to delete video');
-      fetchVideos();
+      await api.fetch(`/cms/video-testimonials/${id}`, { method: 'DELETE' });
+      refreshData();
     } catch (err) {
-      console.error('Error deleting video:', err);
       alert('Failed to delete video.');
     }
   };
@@ -44,11 +35,6 @@ export default function AdminVideoTestimonials() {
   const handleEdit = (video) => {
     setEditingVideo(video);
     setIsModalOpen(true);
-  };
-
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-    setEditingVideo(null);
   };
 
   return (
@@ -89,8 +75,8 @@ export default function AdminVideoTestimonials() {
 
       <VideoUploadModal 
         isOpen={isModalOpen} 
-        onClose={handleCloseModal} 
-        onSuccess={fetchVideos}
+        onClose={() => { setIsModalOpen(false); setEditingVideo(null); }} 
+        onSuccess={refreshData}
         videoToEdit={editingVideo}
       />
     </div>
