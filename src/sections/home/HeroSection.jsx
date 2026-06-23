@@ -1,7 +1,7 @@
 import React from 'react';
 
 export default function HeroSection() {
-  const openTelegram = () => window.open('https://t.me/yourusername', '_blank');
+  const openTelegram = () => window.open('https://t.me/Endless_Digitalmarketing', '_blank');
 
   return (
     <section className="hero-section reveal active" style={{ 

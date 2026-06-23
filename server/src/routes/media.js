@@ -1,15 +1,13 @@
-import multer from 'multer';
+import express from 'express';
+import { uploadMedia, listMedia, deleteMedia } from '../controllers/mediaController.js';
+import { upload } from '../middleware/upload.js';
+import { verifyToken } from '../middleware/authMiddleware.js';
 
-const upload = multer({
-  storage: multer.memoryStorage(),
-  limits: {
-    fileSize: 10 * 1024 * 1024, // 10MB limit to prevent server memory crashes
-  },
-  fileFilter: (req, file, cb) => {
-    if (file.mimetype.startsWith('image/') || file.mimetype.startsWith('video/')) {
-      cb(null, true);
-    } else {
-      cb(new Error('Invalid file type. Only images and videos are allowed.'));
-    }
-  }
-});
+const router = express.Router();
+
+router.post('/upload', verifyToken, upload.single('image'), uploadMedia);
+// NEW: Routes for the media library UI
+router.get('/', listMedia); 
+router.delete('/:fileName', verifyToken, deleteMedia);
+
+export default router;

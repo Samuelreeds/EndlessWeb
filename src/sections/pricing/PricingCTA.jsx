@@ -1,5 +1,5 @@
 export default function PricingCTA() {
-  const openTelegram = () => alert('[PLACEHOLDER] Link this to your Telegram: t.me/yourusername');
+  const openTelegram = () => alert('[PLACEHOLDER] Link this to your Telegram: t.me/Endless_Digitalmarketing');
   const openEmail = () => alert('[PLACEHOLDER] Link this to: mailto:hello@endless.co');
 
   return (

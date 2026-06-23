@@ -4,7 +4,7 @@ import logo from '../assets/EndlessLogo/EndlessLogo1.png';
 
 export default function Footer() {
   const openFacebook = () => window.open('https://facebook.com/yourpage', '_blank'); // Add your FB link
-  const openTelegram = () => window.open('https://t.me/yourusername', '_blank');
+  const openTelegram = () => window.open('https://t.me/Endless_Digitalmarketing', '_blank');
 
   return (
     <footer style={{ background: '#0f172a', color: '#f1f5f9', padding: '80px 24px 40px', marginTop: 'auto' }}>

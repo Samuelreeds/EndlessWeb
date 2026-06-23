@@ -1,5 +1,5 @@
 export default function FloatingChat() {
-  const openTelegram = () => window.open('https://t.me/yourusername', '_blank');
+  const openTelegram = () => window.open('https://t.me/Endless_Digitalmarketing', '_blank');
 
   return (
     <button 

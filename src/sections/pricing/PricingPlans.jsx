@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 export default function PricingPlans() {
   const [isYearly, setIsYearly] = useState(false);
-  const openTelegram = () => window.open('https://t.me/yourusername', '_blank');
+  const openTelegram = () => window.open('https://t.me/Endless_Digitalmarketing', '_blank');
 
   const plans = [
     {

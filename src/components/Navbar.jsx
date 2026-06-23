@@ -6,7 +6,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
-  const openTelegram = () => alert('[PLACEHOLDER] Link this to your Telegram: t.me/yourusername');
+  const openTelegram = () => alert('[PLACEHOLDER] Link this to your Telegram: t.me/Endless_Digitalmarketing');
 
   return (
     <>
