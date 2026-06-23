@@ -7,12 +7,18 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     sourcemap: false, // Set to false for production to reduce bundle size
-    minify: 'terser', // Ensure code is minified
+    // minify: 'terser', // Ensure code is minified
     rollupOptions: {
       output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'react-router-dom'],
-        },
+        manualChunks(id) {
+          if (
+            id.includes('node_modules/react') || 
+            id.includes('node_modules/react-dom') || 
+            id.includes('node_modules/react-router-dom')
+          ) {
+            return 'vendor';
+          }
+        }
       },
     },
   },
