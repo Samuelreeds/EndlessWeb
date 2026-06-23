@@ -5,7 +5,7 @@ import prisma from './config/db.js';
 import adminAuthRoutes from './routes/adminAuth.js';
 import cmsRoutes from './routes/cms.js'; 
 import mediaRoutes from './routes/media.js';
-import userRoutes from './routes/userRoutes.js'; // 1. Add this import
+import userRoutes from './routes/userRoutes.js'; 
 import helmet from 'helmet';
 import settingsRoutes from './routes/settings.js';
 dotenv.config();
@@ -15,11 +15,18 @@ const PORT = process.env.PORT || 5000;
 
 app.use(helmet());
 
-// Middleware
-app.use(cors({
-  origin: 'http://localhost:5173',
-  allowedHeaders: ['Content-Type', 'Authorization']
-}));
+// Middleware: UPDATED CORS CONFIGURATION
+const corsOptions = {
+  origin: [
+    'http://localhost:5173',          // Keep for local testing
+    'https://endless-web-lobj.vercel.app/'       // ADDED: Live Vercel frontend URL
+  ],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Health Check
@@ -36,7 +43,7 @@ app.use('/api/cms', cmsRoutes);
 // Media Upload Routes
 app.use('/api/media', mediaRoutes);
 
-// User Management Routes (2. Add this mount)
+// User Management Routes
 app.use('/api/users', userRoutes);
 
 app.use('/api/settings', settingsRoutes);
