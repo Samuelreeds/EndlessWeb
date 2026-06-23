@@ -2,7 +2,9 @@
   "name": "endless-backend",
   "type": "module",
   "scripts": {
-    "dev": "node --watch src/server.js"
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "build": "npx prisma generate"
   },
   "dependencies": {
     "@prisma/client": "^5.10.0",
