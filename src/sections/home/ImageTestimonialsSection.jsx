@@ -4,9 +4,12 @@ export default function ImageTestimonialsSection() {
   const [galleries, setGalleries] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  // ADDED: This will use your Render URL in production, and localhost on your PC
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
   useEffect(() => {
-    // Fetch directly from your newly working backend
-    fetch('http://localhost:5000/api/cms/image-testimonials')
+    // UPDATED: Using the dynamic API_URL
+    fetch(`${API_URL}/cms/image-testimonials`)
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data) && data.length > 0) {

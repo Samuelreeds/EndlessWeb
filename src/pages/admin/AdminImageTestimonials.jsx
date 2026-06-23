@@ -7,13 +7,19 @@ export default function AdminImageTestimonials() {
   const [galleries, setGalleries] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  // 1. ADDED: This will use your Render URL in production, and localhost on your PC
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
   const fetchGalleries = async () => {
     try {
       setIsLoading(true);
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:5000/api/cms/image-testimonials', {
+      
+      // 2. UPDATED: Using the dynamic API_URL
+      const res = await fetch(`${API_URL}/cms/image-testimonials`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
+      
       const data = await res.json();
       setGalleries(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -31,10 +37,13 @@ export default function AdminImageTestimonials() {
     if (!window.confirm('Are you sure you want to delete this gallery?')) return;
     try {
       const token = localStorage.getItem('token');
-      await fetch(`http://localhost:5000/api/cms/image-testimonials/${id}`, {
+      
+      // 3. UPDATED: Using the dynamic API_URL
+      await fetch(`${API_URL}/cms/image-testimonials/${id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
+      
       fetchGalleries();
     } catch (err) {
       alert('Failed to delete gallery.');
