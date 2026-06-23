@@ -48,6 +48,19 @@ app.use('/api/users', userRoutes);
 
 app.use('/api/settings', settingsRoutes);
 
+// Global Error Handler (Add this right before startServer)
+app.use((err, req, res, next) => {
+  console.error('Server Error:', err.message);
+  
+  // Only show detailed errors in local development, hide them in production
+  const isProduction = process.env.NODE_ENV === 'production';
+  
+  res.status(err.status || 500).json({
+    error: 'Internal Server Error',
+    message: isProduction ? 'Something went wrong processing your request.' : err.message
+  });
+});
+
 // Database connection check and server start
 async function startServer() {
   try {
