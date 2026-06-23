@@ -72,7 +72,7 @@ export default function VideoTestimonialsSection() {
   const [activeVideo, setActiveVideo] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/cms/video-testimonials')
+    fetch('${import.meta.env.VITE_API_URL}/api/cms/video-testimonials')
       .then((res) => res.json())
       .then((data) => setVideos(data.slice(0, 3)))
       .catch((err) => console.error('Error fetching videos:', err));

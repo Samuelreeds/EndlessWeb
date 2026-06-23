@@ -71,7 +71,7 @@ export default function CaseStudyModal({ isOpen, onClose, onSuccess, studyToEdit
       if (file) {
         const mediaForm = new FormData();
         mediaForm.append('image', file);
-        const uploadRes = await fetch('http://localhost:5000/api/media/upload', {
+        const uploadRes = await fetch(`${import.meta.env.VITE_API_URL}/api/media/upload`, {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${token}` },
           body: mediaForm,
@@ -95,9 +95,9 @@ export default function CaseStudyModal({ isOpen, onClose, onSuccess, studyToEdit
       };
 
       const url = isEditing 
-        ? `http://localhost:5000/api/cms/case-studies/${studyToEdit.id}`
-        : 'http://localhost:5000/api/cms/case-studies';
-        
+        ? `${import.meta.env.VITE_API_URL}/api/cms/case-studies/${studyToEdit.id}`
+        : `${import.meta.env.VITE_API_URL}/api/cms/case-studies`;
+
       const res = await fetch(url, {
         method: isEditing ? 'PUT' : 'POST',
         headers: {

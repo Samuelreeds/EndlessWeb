@@ -50,7 +50,7 @@ export default function VideoUploadModal({ isOpen, onClose, onSuccess, videoToEd
   const uploadMedia = async (file, token) => {
     const mediaForm = new FormData();
     mediaForm.append('image', file); // using 'image' as expected by backend multer
-    const res = await fetch('http://localhost:5000/api/media/upload', {
+    const res = await fetch('${import.meta.env.VITE_API_URL}/api/media/upload', {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${token}` },
       body: mediaForm,
@@ -90,8 +90,8 @@ export default function VideoUploadModal({ isOpen, onClose, onSuccess, videoToEd
       };
 
       const url = isEditing 
-        ? `http://localhost:5000/api/cms/video-testimonials/${videoToEdit.id}`
-        : 'http://localhost:5000/api/cms/video-testimonials';
+        ? `${import.meta.env.VITE_API_URL}/api/cms/video-testimonials/${videoToEdit.id}`
+        : '${import.meta.env.VITE_API_URL}/api/cms/video-testimonials';
 
       const res = await fetch(url, {
         method: isEditing ? 'PUT' : 'POST',

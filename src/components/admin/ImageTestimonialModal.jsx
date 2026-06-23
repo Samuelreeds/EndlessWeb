@@ -7,7 +7,7 @@ export default function ImageTestimonialModal({ isOpen, onClose, initialData, on
   const [isLoading, setIsLoading] = useState(false);
   const fileInputRef = useRef(null);
 
-  const BASE_URL = 'http://localhost:5000/api';
+  const BASE_URL = `${import.meta.env.VITE_API_URL}/api`;
 
   useEffect(() => {
     if (initialData) {

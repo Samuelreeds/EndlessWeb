@@ -33,8 +33,8 @@ export default function TestimonialModal({ isOpen, onClose, initialData, onSucce
 
     try {
       const url = isEditing 
-        ? `http://localhost:5000/api/cms/testimonials/${initialData.id}` 
-        : 'http://localhost:5000/api/cms/testimonials';
+        ? `${import.meta.env.VITE_API_URL}/api/cms/testimonials/${initialData.id}` 
+        : '${import.meta.env.VITE_API_URL}/api/cms/testimonials';
         
       // 1. Grab the token
       const token = localStorage.getItem('token'); 

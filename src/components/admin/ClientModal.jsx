@@ -55,7 +55,7 @@ export default function ClientModal({ isOpen, onClose, onSuccess, clientToEdit }
         const mediaForm = new FormData();
         mediaForm.append('image', file);
 
-        const uploadRes = await fetch('http://localhost:5000/api/media/upload', {
+        const uploadRes = await fetch(`${import.meta.env.VITE_API_URL}/api/media/upload`, {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${token}` },
           body: mediaForm,
@@ -79,8 +79,8 @@ export default function ClientModal({ isOpen, onClose, onSuccess, clientToEdit }
 
       // NEW: Dynamically set the URL and Method based on isEditing
       const url = isEditing 
-        ? `http://localhost:5000/api/cms/client-logos/${clientToEdit.id}`
-        : 'http://localhost:5000/api/cms/client-logos';
+        ? `${import.meta.env.VITE_API_URL}/api/cms/client-logos/${clientToEdit.id}`
+        : `${import.meta.env.VITE_API_URL}/api/cms/client-logos`;
         
       const method = isEditing ? 'PUT' : 'POST';
 

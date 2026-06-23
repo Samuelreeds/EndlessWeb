@@ -4,7 +4,7 @@ export default function TestimonialsSection() {
   const [testimonials, setTestimonials] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/cms/testimonials')
+    fetch('${import.meta.env.VITE_API_URL}/api/cms/testimonials')
       .then((res) => res.json())
       .then((data) => setTestimonials(data.slice(0, 3))) // Show top 3 on home
       .catch((err) => console.error('Error fetching testimonials:', err));

@@ -5,7 +5,7 @@ export default function ClientLogos() {
 
   useEffect(() => {
     // 1. Updated to the correct backend route: /client-logos
-    fetch('http://localhost:5000/api/cms/client-logos')
+    fetch(`${import.meta.env.VITE_API_URL}/api/cms/client-logos`)
       .then((res) => {
         if (!res.ok) throw new Error('Failed to fetch logos');
         return res.json();

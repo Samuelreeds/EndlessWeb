@@ -4,7 +4,7 @@ export default function CaseStudiesSection() {
   const [caseStudies, setCaseStudies] = useState([]);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/cms/case-studies')
+    fetch('${import.meta.env.VITE_API_URL}/api/cms/case-studies')
       .then((res) => res.json())
       .then((data) => setCaseStudies(data))
       .catch((err) => console.error('Error fetching case studies:', err));

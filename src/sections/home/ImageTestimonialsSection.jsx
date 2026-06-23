@@ -5,7 +5,7 @@ export default function ImageTestimonialsSection() {
   const [isLoading, setIsLoading] = useState(true);
 
   // ADDED: This will use your Render URL in production, and localhost on your PC
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+  const API_URL = import.meta.env.VITE_API_URL || '${import.meta.env.VITE_API_URL}/api';
 
   useEffect(() => {
     // UPDATED: Using the dynamic API_URL

@@ -19,7 +19,7 @@ app.use(helmet());
 const corsOptions = {
   origin: [
     'http://localhost:5173',          // Keep for local testing
-    'https://endless-web-lobj.vercel.app/'       // ADDED: Live Vercel frontend URL
+    'https://endless-web-lobj.vercel.app'       // ADDED: Live Vercel frontend URL
   ],
   allowedHeaders: ['Content-Type', 'Authorization'],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],

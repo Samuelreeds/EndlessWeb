@@ -12,7 +12,7 @@ export default function AdminMedia() {
 
   const { data, isLoading, updateCache } = useCache('media', '/media');
   const mediaList = data || [];
-  const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+  const BASE_URL = import.meta.env.VITE_API_URL || '${import.meta.env.VITE_API_URL}/api';
 
   const refreshData = async () => {
     try {

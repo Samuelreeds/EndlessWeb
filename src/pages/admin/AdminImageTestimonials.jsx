@@ -8,7 +8,7 @@ export default function AdminImageTestimonials() {
   const [isLoading, setIsLoading] = useState(true);
 
   // 1. ADDED: This will use your Render URL in production, and localhost on your PC
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+  const API_URL = import.meta.env.VITE_API_URL || '${import.meta.env.VITE_API_URL}/api';
 
   const fetchGalleries = async () => {
     try {
