@@ -18,6 +18,7 @@ import AdminClients from './pages/admin/AdminClients';
 import AdminTestimonials from './pages/admin/AdminTestimonials';
 import AdminVideoTestimonials from './pages/admin/AdminVideoTestimonials';
 import AdminCaseStudies from './pages/admin/AdminCaseStudies';
+import AdminImageTestimonials from './pages/admin/AdminImageTestimonials';
 
 import AdminMedia from './pages/admin/AdminMedia';
 import AdminUsers from './pages/admin/AdminUsers';
@@ -73,6 +74,7 @@ export default function App() {
             <Route path="testimonials" element={<AdminTestimonials />} />
             <Route path="video-testimonials" element={<AdminVideoTestimonials />} />
             <Route path="case-studies" element={<AdminCaseStudies />} />
+            <Route path="image-testimonials" element={<AdminImageTestimonials />} />
             <Route path="media" element={<AdminMedia />} />
             <Route path="users" element={<AdminUsers />} />
             <Route path="settings" element={<AdminSettings />} />

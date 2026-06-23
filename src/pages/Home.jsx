@@ -4,9 +4,9 @@ import WhySection from '../sections/home/WhySection';
 import BeforeAfterSection from '../sections/home/BeforeAfterSection';
 import TestimonialsSection from '../sections/home/TestimonialsSection';
 import VideoTestimonialsSection from '../sections/home/VideoTestimonialsSection';
+import ImageTestimonialsSection from '../sections/home/ImageTestimonialsSection'; 
 import FinalCTASection from '../sections/home/FinalCTASection';
 import ClientLogos from '../components/ClientLogos';
-
 
 export default function Home() {
   return (
@@ -17,7 +17,10 @@ export default function Home() {
       <WhySection />
       <BeforeAfterSection />
       <TestimonialsSection />
+      
+      {/* Social Proof Block */}
       <VideoTestimonialsSection />
+      <ImageTestimonialsSection /> 
 
       <FinalCTASection />
     </div>
