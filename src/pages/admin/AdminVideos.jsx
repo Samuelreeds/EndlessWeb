@@ -5,18 +5,18 @@ import VideoUploadModal from '../../components/admin/VideoUploadModal';
 export default function AdminVideos() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const mockVideos = [
-    {
-      id: 1,
-      title: 'Sarah K. Success Story',
-      subtitle: 'Café Owner - 500% ROI in 3 months',
-    },
-    {
-      id: 2,
-      title: 'Marcus D. Review',
-      subtitle: 'Fitness Studio - Brand Transformation',
-    }
-  ];
+  // const mockVideos = [
+  //   {
+  //     id: 1,
+  //     title: 'Sarah K. Success Story',
+  //     subtitle: 'Café Owner - 500% ROI in 3 months',
+  //   },
+  //   {
+  //     id: 2,
+  //     title: 'Marcus D. Review',
+  //     subtitle: 'Fitness Studio - Brand Transformation',
+  //   }
+  // ];
 
   return (
     <div className="space-y-6 animate-[fadeIn_0.3s_ease-out]">

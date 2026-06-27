@@ -2,14 +2,20 @@ import { useEffect, useState } from 'react';
 
 export default function TestimonialsSection() {
   const [testimonials, setTestimonials] = useState([]);
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
   useEffect(() => {
-    fetch('${import.meta.env.VITE_API_URL}/api/cms/testimonials')
+    fetch(`${API_URL}/cms/testimonials`)
       .then((res) => res.json())
-      .then((data) => setTestimonials(data.slice(0, 3))) // Show top 3 on home
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setTestimonials(data.slice(0, 3)); // Show top 3 on home
+        }
+      })
       .catch((err) => console.error('Error fetching testimonials:', err));
   }, []);
 
+  // If there is no real data from the CMS, hide the section entirely
   if (testimonials.length === 0) return null;
 
   return (

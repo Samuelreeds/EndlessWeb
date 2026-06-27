@@ -1,10 +1,41 @@
-import React from 'react';
-// Replace this with your exact logo path if it is different
+import React, { useEffect, useState } from 'react';
 import logo from '../assets/EndlessLogo/EndlessLogo1.png'; 
 
 export default function Footer() {
-  const openFacebook = () => window.open('https://facebook.com/yourpage', '_blank'); // Add your FB link
-  const openTelegram = () => window.open('https://t.me/Endless_Digitalmarketing', '_blank');
+  const [settings, setSettings] = useState({
+    companyName: 'Endless Digital Marketing',
+    facebookUrl: 'https://facebook.com',
+    telegramUrl: 'https://t.me/Endless_Digitalmarketing',
+    address: '',
+    phoneNumber: '',
+    businessHours: '',
+    copyrightText: `© ${new Date().getFullYear()} Endless Digital Marketing. All rights reserved.`
+  });
+
+  useEffect(() => {
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+    fetch(`${API_URL}/settings`)
+      .then(res => res.json())
+      .then(data => {
+        if (Object.keys(data).length > 0) {
+          // Merge fetched data with defaults, so empty fields fall back gracefully
+          setSettings(prev => ({
+            ...prev,
+            companyName: data.companyName || prev.companyName,
+            facebookUrl: data.facebookUrl || prev.facebookUrl,
+            telegramUrl: data.telegramUrl || prev.telegramUrl,
+            address: data.address || '',
+            phoneNumber: data.phoneNumber || '',
+            businessHours: data.businessHours || '',
+            copyrightText: data.copyrightText || prev.copyrightText
+          }));
+        }
+      })
+      .catch(err => console.error("Error fetching footer settings:", err));
+  }, []);
+
+  const openFacebook = () => window.open(settings.facebookUrl, '_blank');
+  const openTelegram = () => window.open(settings.telegramUrl, '_blank');
 
   return (
     <footer style={{ background: '#0f172a', color: '#f1f5f9', padding: '80px 24px 40px', marginTop: 'auto' }}>
@@ -16,21 +47,23 @@ export default function Footer() {
           <div style={{ maxWidth: '320px' }}>
             <img 
               src={logo} 
-              alt="Endless Logo" 
+              alt={`${settings.companyName} Logo`} 
               style={{ height: '48px', width: '48px', objectFit: 'cover', borderRadius: '50%', marginBottom: '24px', background: 'white' }} 
             />
+            <p style={{ color: '#94a3b8', lineHeight: '1.6', marginBottom: '24px', fontWeight: 'bold' }}>
+              {settings.companyName}
+            </p>
             <p style={{ color: '#94a3b8', lineHeight: '1.6', marginBottom: '24px' }}>
               Endless Growth for Your Digital Presence. We handle your social media end-to-end.
             </p>
             
-            {/* New Facebook Button */}
             <button 
               onClick={openFacebook}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '10px',
-                background: '#1877F2', // Official Facebook Blue
+                background: '#1877F2',
                 color: 'white',
                 border: 'none',
                 padding: '12px 24px',
@@ -50,7 +83,7 @@ export default function Footer() {
             </button>
           </div>
 
-          {/* Footer Links */}
+          {/* Footer Links & Dynamic Info */}
           <div style={{ display: 'flex', gap: '64px', flexWrap: 'wrap' }}>
             <div>
               <h4 style={{ color: 'white', fontWeight: '600', marginBottom: '20px' }}>Services</h4>
@@ -74,7 +107,16 @@ export default function Footer() {
               <h4 style={{ color: 'white', fontWeight: '600', marginBottom: '20px' }}>Contact</h4>
               <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 <li><span onClick={openTelegram} style={{ color: '#94a3b8', cursor: 'pointer' }}>Telegram Support</span></li>
-                <li><a href="mailto:hello@endless.digital" style={{ color: '#94a3b8', textDecoration: 'none' }}>hello@endless.digital</a></li>
+                {/* Dynamically render these fields only if they exist in the DB */}
+                {settings.phoneNumber && (
+                  <li><span style={{ color: '#94a3b8' }}>{settings.phoneNumber}</span></li>
+                )}
+                {settings.address && (
+                  <li><span style={{ color: '#94a3b8' }}>{settings.address}</span></li>
+                )}
+                {settings.businessHours && (
+                  <li><span style={{ color: '#94a3b8', fontSize: '14px', opacity: 0.8 }}>{settings.businessHours}</span></li>
+                )}
               </ul>
             </div>
           </div>
@@ -83,7 +125,7 @@ export default function Footer() {
 
         {/* Copyright */}
         <div style={{ textAlign: 'center', color: '#64748b', fontSize: '14px' }}>
-          © {new Date().getFullYear()} Endless Digital Marketing. All rights reserved.
+          {settings.copyrightText}
         </div>
         
       </div>

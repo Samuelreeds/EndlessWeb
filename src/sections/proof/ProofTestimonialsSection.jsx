@@ -1,46 +1,68 @@
+import { useState, useEffect } from 'react';
+
 export default function ProofTestimonialsSection() {
+  const [settings, setSettings] = useState({
+    successHeading: 'What They Said After 90 Days',
+    successQuote: '',
+    successAuthor: ''
+  });
+
+  useEffect(() => {
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+    
+    fetch(`${API_URL}/settings`)
+      .then(res => res.json())
+      .then(data => {
+        if (Object.keys(data).length > 0) {
+          setSettings(prev => ({
+            ...prev,
+            successHeading: data.successHeading || prev.successHeading,
+            successQuote: data.successQuote || prev.successQuote,
+            successAuthor: data.successAuthor || prev.successAuthor
+          }));
+        }
+      })
+      .catch(err => console.error("Error fetching 90-day success settings:", err));
+  }, []);
+
+  // Do not render the section at all if there is no quote set in the Admin panel
+  if (!settings.successQuote) return null;
+
+  // Automatically parse the "Name, Role" format from the admin panel
+  const authorParts = settings.successAuthor ? settings.successAuthor.split(',') : ['Anonymous'];
+  const authorName = authorParts[0].trim();
+  const authorRole = authorParts.length > 1 ? authorParts[1].trim() : 'Client';
+  const avatarLetter = authorName ? authorName.charAt(0).toUpperCase() : 'C';
+
   return (
     <section className="testimonials-section">
       <div className="container">
+        
         <div className="section-head">
           <div className="eyebrow">More From Our Clients</div>
-          <h2>What They Said After 90 Days</h2>
+          {/* Dynamically loads the heading from Admin Settings */}
+          <h2>{settings.successHeading}</h2>
         </div>
-        <div className="testimonials-grid">
-          <div className="testi-card">
-            <div className="testi-stars">★★★★★</div>
-            <p>"We were skeptical — we'd tried social media before and it went nowhere. Endless turned our account into an actual business tool. We now get 15–20 inquiries a week just from Instagram."</p>
-            <div className="testi-author">
-              <div className="testi-avatar">JR</div>
-              <div>
-                <div className="testi-name">James R.</div>
-                <div className="testi-role">Restaurant Owner</div>
-              </div>
-            </div>
-          </div>
-          <div className="testi-card">
-            <div className="testi-stars">★★★★★</div>
-            <p>"The poster designs alone are worth the price. But what really impressed me was the strategy — they understood what my customers actually respond to and built around that."</p>
-            <div className="testi-author">
-              <div className="testi-avatar">NA</div>
-              <div>
-                <div className="testi-name">Nadia A.</div>
-                <div className="testi-role">E-commerce Brand</div>
-              </div>
-            </div>
-          </div>
-          <div className="testi-card">
-            <div className="testi-stars">★★★★★</div>
-            <p>"I used to spend hours worrying about posting. Now I spend that time on my actual business. Best decision I made this year — the ROI speaks for itself."</p>
-            <div className="testi-author">
-              <div className="testi-avatar">TM</div>
-              <div>
-                <div className="testi-name">Tom M.</div>
-                <div className="testi-role">Personal Brand</div>
+
+        {/* Display as a centered, featured highlight card instead of a crowded grid */}
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <div className="testi-card" style={{ maxWidth: '700px', width: '100%', textAlign: 'center' }}>
+            <div className="testi-stars" style={{ justifyContent: 'center' }}>★★★★★</div>
+            
+            <p style={{ fontSize: '18px', lineHeight: '1.8', margin: '24px 0' }}>
+              "{settings.successQuote}"
+            </p>
+            
+            <div className="testi-author" style={{ justifyContent: 'center', marginTop: '32px' }}>
+              <div className="testi-avatar">{avatarLetter}</div>
+              <div style={{ textAlign: 'left' }}>
+                <div className="testi-name">{authorName}</div>
+                <div className="testi-role">{authorRole}</div>
               </div>
             </div>
           </div>
         </div>
+
       </div>
     </section>
   );

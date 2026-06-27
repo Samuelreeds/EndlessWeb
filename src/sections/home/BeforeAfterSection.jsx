@@ -6,7 +6,7 @@ export default function BeforeAfterSection() {
   const [caseStudy, setCaseStudy] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/cms/case-studies')
+    fetch('VITE_API_URL/api/cms/case-studies')
       .then((res) => res.json())
       .then((data) => {
         if (data.length > 0) setCaseStudy(data[0]); // Feature the first case study

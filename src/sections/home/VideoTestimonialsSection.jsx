@@ -70,14 +70,20 @@ function VideoItem({ video, onVideoClick }) {
 export default function VideoTestimonialsSection() {
   const [videos, setVideos] = useState([]);
   const [activeVideo, setActiveVideo] = useState(null);
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
   useEffect(() => {
-    fetch('${import.meta.env.VITE_API_URL}/api/cms/video-testimonials')
+    fetch(`${API_URL}/cms/video-testimonials`)
       .then((res) => res.json())
-      .then((data) => setVideos(data.slice(0, 3)))
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setVideos(data.slice(0, 3));
+        }
+      })
       .catch((err) => console.error('Error fetching videos:', err));
   }, []);
 
+  // Hide the section entirely if no videos exist in the database
   if (videos.length === 0) return null;
 
   return (

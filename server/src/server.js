@@ -8,6 +8,7 @@ import mediaRoutes from './routes/media.js';
 import userRoutes from './routes/userRoutes.js'; 
 import helmet from 'helmet';
 import settingsRoutes from './routes/settings.js';
+import pricingRoutes from './routes/pricing.js';
 dotenv.config();
 
 const app = express();
@@ -36,6 +37,8 @@ app.get('/api/health', (req, res) => {
 
 // Admin Auth Routes
 app.use('/api/admin', adminAuthRoutes);
+
+app.use('/api/pricing', pricingRoutes);
 
 // Content Management System Routes
 app.use('/api/cms', cmsRoutes);
